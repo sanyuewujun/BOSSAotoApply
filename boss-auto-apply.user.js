@@ -136,7 +136,7 @@
       if (!key) { resolve(null); return; } // 未配置 → 调用方回落模板
       const skill = getSkill();
       const sysMsg = skill
-        ? `你是求职助手，根据岗位信息生成一句打招呼语。硬性要求：1) 只能使用以下【技能列表】中真实掌握的技能来描述自己，严禁编造、夸大或补充列表之外的技能；2) 写作风格参考用户给的【模板】；3) 第一人称，120字以内；4) 直接输出内容，不要任何解释。\n技能列表：${skill}`
+        ? `你是求职助手，根据岗位信息生成一句打招呼语。硬性要求：1) 优先分析岗位JD需求，从以下【技能列表】中挑选匹配的2-3个真实技能融入打招呼语中，严禁编造、夸大或补充列表之外的技能；2) 写作风格参考用户给的【模板】；3) 第一人称，120字以内；4) 直接输出内容，不要任何解释。\n技能列表：${skill}`
         : `你是求职助手，根据岗位信息生成一句打招呼语。硬性要求：1) 描述自己的技能时，只能使用模板中已有的技能表述，严禁编造、夸大技能；2) 写作风格参考用户给的【模板】；3) 第一人称，120字以内；4) 直接输出内容，不要任何解释。`;
       GM_xmlhttpRequest({
         method: 'POST',
@@ -207,7 +207,7 @@
           <input id="bap-model-filter" placeholder="过滤模型关键词，如 Qwen / DeepSeek" style="width:100%;font-size:10px;padding:2px;margin-bottom:3px;box-sizing:border-box;">
           <select id="bap-model" size="5" style="width:100%;font-size:10px;padding:2px;margin-bottom:8px;box-sizing:border-box;">${modelOptions}</select>
           <div style="font-size:10px;color:#666;margin-bottom:3px;">招呼语模板（多条用 <b>---</b> 分隔；支持 {title} {company} 变量；清空恢复默认）</div>
-          <textarea id="bap-templates" rows="4" style="width:100%;font-size:10px;padding:4px;margin-bottom:8px;box-sizing:border-box;resize:vertical;" placeholder="如：您好！看到 {company} 的 {title} 岗位，期待沟通！\n\n---\n\n如：您好！我对 {title} 感兴趣，可以交流..."></textarea>
+          <textarea id="bap-templates" rows="4" style="width:100%;font-size:10px;padding:4px;margin-bottom:8px;box-sizing:border-box;resize:vertical;" placeholder="如：您好！看到 {company} 的 {title} 岗位，期待沟通！\n\n---\n\n如：您好！我对 {title} 感兴趣，可以交流...">${savedTemplates.replace(/</g, '&lt;')}</textarea>
           <div style="font-size:10px;color:#666;margin-bottom:3px;">我的技能（逗号分隔；<b>AI 只允许用这里的技能，严禁编造</b>；留空则用模板中的技能）</div>
           <textarea id="bap-skill" rows="2" placeholder="如：Python, RAG, LangGraph, Dify, MCP协议, 通义千问API" style="width:100%;font-size:10px;padding:4px;margin-bottom:8px;box-sizing:border-box;resize:vertical;">${savedSkill.replace(/</g, '&lt;')}</textarea>
           <div style="font-size:10px;color:#777;background:#f7f8fa;border:1px solid #e6e8eb;border-radius:4px;padding:6px;line-height:1.6;">
