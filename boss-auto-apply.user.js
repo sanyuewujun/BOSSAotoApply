@@ -16,8 +16,8 @@
 
   // ==================== 模板（默认值，可前台自定义） ====================
   const DEFAULT_TEMPLATES = [
-    `您好！我有 AI 工程经验，完整掌握 ReAct / LangGraph / AutoGen 等 Agent 范式及 MCP 协议集成，做过落地 RAG 知识库、电商自动上架工作流等项目。熟悉国产大模型及 Gemini 等国外 API，也有 Coze、Dify、n8n 等编排工具使用经历。贵司 {title} 岗位与我的方向高度契合，期待进一步沟通！`,
-    `您好！我熟悉主流 AI 应用平台与工具链，具备 Dify / Coze / n8n 搭建企业级工作流能力，也熟悉多模型接入与国产 API 适配。项目上有相关落地经历。看到 {company} 的 {title} 岗位，希望能投递简历并交流一下！`,
+    `如：您好！看到 {company} 的 {title} 岗位，期待沟通！`,
+    `如：您好！我对 {title} 感兴趣，可以交流...`,
   ];
 
   const SESSION_KEY = 'bap_session';
@@ -207,7 +207,7 @@
           <input id="bap-model-filter" placeholder="过滤模型关键词，如 Qwen / DeepSeek" style="width:100%;font-size:10px;padding:2px;margin-bottom:3px;box-sizing:border-box;">
           <select id="bap-model" size="5" style="width:100%;font-size:10px;padding:2px;margin-bottom:8px;box-sizing:border-box;">${modelOptions}</select>
           <div style="font-size:10px;color:#666;margin-bottom:3px;">招呼语模板（多条用 <b>---</b> 分隔；支持 {title} {company} 变量；清空恢复默认）</div>
-          <textarea id="bap-templates" rows="4" style="width:100%;font-size:10px;padding:4px;margin-bottom:8px;box-sizing:border-box;resize:vertical;">${savedTemplates.replace(/</g, '&lt;')}</textarea>
+          <textarea id="bap-templates" rows="4" style="width:100%;font-size:10px;padding:4px;margin-bottom:8px;box-sizing:border-box;resize:vertical;" placeholder="如：您好！看到 {company} 的 {title} 岗位，期待沟通！\n\n---\n\n如：您好！我对 {title} 感兴趣，可以交流..."></textarea>
           <div style="font-size:10px;color:#666;margin-bottom:3px;">我的技能（逗号分隔；<b>AI 只允许用这里的技能，严禁编造</b>；留空则用模板中的技能）</div>
           <textarea id="bap-skill" rows="2" placeholder="如：Python, RAG, LangGraph, Dify, MCP协议, 通义千问API" style="width:100%;font-size:10px;padding:4px;margin-bottom:8px;box-sizing:border-box;resize:vertical;">${savedSkill.replace(/</g, '&lt;')}</textarea>
           <div style="font-size:10px;color:#777;background:#f7f8fa;border:1px solid #e6e8eb;border-radius:4px;padding:6px;line-height:1.6;">
