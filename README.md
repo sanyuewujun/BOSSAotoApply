@@ -5,6 +5,9 @@
 [![Version](https://img.shields.io/badge/version-4.6-brightgreen)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
 [![Platform](https://img.shields.io/badge/platform-Tampermonkey-orange)]()
+[![GitHub Stars](https://img.shields.io/github/stars/sanyuewujun/BOSSAotoApply?style=social)](https://github.com/sanyuewujun/BOSSAotoApply)
+
+> ⭐ 如果觉得有帮助，请给一个 **star** 收藏，帮我提高 GitHub 账户含金量！[点这里一键 Star ⭐](https://github.com/sanyuewujun/BOSSAotoApply)
 
 ---
 
@@ -290,3 +293,13 @@ API Key 仅保存在**本机浏览器**的 Tampermonkey 存储中，只在调用
 ## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request。若 BOSS直聘页面改版导致选择器失效，请附带页面截图或 DOM 结构说明。
+
+---
+
+> ⭐ 如果觉得有帮助，请给一个 **star** 收藏，帮我提高 GitHub 账户含金量！你的支持是我持续更新的最大动力 🚀
+
+## ⭐ Star 历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=sanyuewujun/BOSSAotoApply&type=Date)](https://star-history.com/#sanyuewujun/BOSSAotoApply&Date)
+
+> 📈 数据由 [Star History](https://star-history.com/) 自动生成，点击图片可查看交互式曲线。
