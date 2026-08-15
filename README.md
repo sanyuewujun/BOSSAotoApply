@@ -7,7 +7,7 @@
 [![Platform](https://img.shields.io/badge/platform-Tampermonkey-orange)]()
 [![GitHub Stars](https://img.shields.io/github/stars/sanyuewujun/BOSSAotoApply?style=social)](https://github.com/sanyuewujun/BOSSAotoApply)
 
-> ⭐ 如果觉得有帮助，请给一个 **star** 收藏，帮我提高 GitHub 账户含金量！点击右上角 **Star ⭐** 按钮即可（GitHub 不支持链接直接 star，需手动点一下）
+> ⭐ 如果觉得有帮助，请给一个 **star** 收藏，帮我提高 GitHub 账户含金量！点击右上角 **Star ⭐** 按钮即可！
 
 ---
 
