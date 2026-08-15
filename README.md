@@ -7,7 +7,7 @@
 [![Platform](https://img.shields.io/badge/platform-Tampermonkey-orange)]()
 [![GitHub Stars](https://img.shields.io/github/stars/sanyuewujun/BOSSAotoApply?style=social)](https://github.com/sanyuewujun/BOSSAotoApply)
 
-> ⭐ 如果觉得有帮助，请给一个 **star** 收藏，帮我提高 GitHub 账户含金量！[点这里一键 Star ⭐](https://github.com/sanyuewujun/BOSSAotoApply)
+> ⭐ 如果觉得有帮助，请给一个 **star** 收藏，帮我提高 GitHub 账户含金量！[点这里前往仓库](https://github.com/sanyuewujun/BOSSAotoApply)，点击右上角 **Star ⭐** 按钮即可（GitHub 不支持链接直接 star，需手动点一下）
 
 ---
 
@@ -296,7 +296,7 @@ API Key 仅保存在**本机浏览器**的 Tampermonkey 存储中，只在调用
 
 ---
 
-> ⭐ 如果觉得有帮助，请给一个 **star** 收藏，帮我提高 GitHub 账户含金量！你的支持是我持续更新的最大动力 🚀
+> ⭐ 如果觉得有帮助，请给一个 **star** 收藏，帮我提高 GitHub 账户含金量！[点这里前往仓库](https://github.com/sanyuewujun/BOSSAotoApply) 点击右上角 **Star ⭐** 按钮，你的支持是我持续更新的最大动力 🚀
 
 ## ⭐ Star 历史
 
