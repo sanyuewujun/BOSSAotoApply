@@ -2,7 +2,7 @@
 
 > Tampermonkey 用户脚本：在 BOSS直聘职位列表页一键自动投递，支持 **AI 定制打招呼语**、自定义模板/技能、自动翻页、跨页面会话恢复。
 
-[![Version](https://img.shields.io/badge/version-4.6-brightgreen)]()
+[![Version](https://img.shields.io/badge/version-4.7-brightgreen)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
 [![Platform](https://img.shields.io/badge/platform-Tampermonkey-orange)]()
 [![GitHub Stars](https://img.shields.io/github/stars/sanyuewujun/BOSSAotoApply?style=social)](https://github.com/sanyuewujun/BOSSAotoApply)
@@ -103,6 +103,7 @@
 | 每日上限 | 当天最多投递次数（1~200） | 30 |
 | 间隔(s) | 每次投递之间的等待秒数（5~600） | 30 |
 | 自定义招呼语 | 固定招呼语，留空则走 AI/模板；支持 `{title}` `{company}` | 空 |
+| 屏蔽关键词 | 逗号/换行分隔的关键词；职位详情（含招聘要求）命中任一即**跳过不投递**，不计入已投 | 空 |
 
 > 💡 自定义招呼语优先级最高：**自定义 > AI 生成 > 第一条模板**。
 
@@ -198,7 +199,10 @@
 **Q6：更换浏览器/电脑后配置丢失？**
 配置保存在 Tampermonkey 的 GM 存储中，与浏览器绑定。换设备需重新导入脚本并重新配置（可同步 Tampermonkey 账号）。
 
-**Q7：脚本会不会泄露我的 API Key？**
+**Q7：如何跳过某些岗位（如不接受线上面试的）？**
+在「投递配置页」的 **屏蔽关键词** 框填入关键词（逗号或换行分隔），例如 `不接受线上面试, 仅线下, 校招`。脚本会读取职位详情全文，命中任一关键词即跳过该职位、不投递也不计入已投。修改关键词后下一轮立即生效（每轮重新评估，不写死）。
+
+**Q8：脚本会不会泄露我的 API Key？**
 API Key 仅保存在**本机浏览器**的 Tampermonkey 存储中，只在调用硅基流动 API 时发送，不会上传到任何第三方服务器。
 
 ---
@@ -279,6 +283,7 @@ API Key 仅保存在**本机浏览器**的 Tampermonkey 存储中，只在调用
 
 | 版本 | 内容 |
 |------|------|
+| v4.7 | 新增「屏蔽关键词」：职位详情命中关键词自动跳过投递 |
 | v4.6 | 模型列表改为从硅基流动 API 实时获取（不写死），支持过滤 |
 | v4.5 | 新增「我的技能」配置，AI 生成硬约束（禁止编造技能） |
 | v4.4 | 移除硬编码 API Key（完全前台配置）；模板改为前台可编辑 |

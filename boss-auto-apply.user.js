@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BOSS直聘自动投递助手 (AI版 v4.6)
 // @namespace    https://github.com/sanyuewujun/BOSSAotoApply
-// @version      4.6
+// @version      4.7
 // @description  DOM提取 + 会话持久化，聊天页自动返回并继续投递
 // @author       AI Assistant
 // @match        https://www.zhipin.com/web/geek/*
@@ -28,6 +28,7 @@
   const MODELS_KEY = 'bap_models'; // 实时获取的模型列表缓存
   const TEMPLATES_KEY = 'bap_templates';
   const SKILL_KEY = 'bap_skill';
+  const BLOCK_WORDS_KEY = 'bap_block_words'; // 屏蔽关键词（命中即跳过投递）
   const FRESH_MS = 15 * 60 * 1000; // 会话 15 分钟内有效
 
   // 默认模型列表（仅作占位，面板可通过"刷新列表"从硅基流动 API 实时获取）
@@ -129,6 +130,21 @@
   // 技能列表（前台配置，持久化；AI 生成时只允许使用这里的技能）
   function getSkill() { return GM_getValue(SKILL_KEY, '').trim(); }
 
+  // ==================== 屏蔽关键词（命中即跳过投递） ====================
+  function getBlockWords() {
+    const raw = GM_getValue(BLOCK_WORDS_KEY, '').trim();
+    if (!raw) return [];
+    return raw.split(/[,，、;/;\n]+/).map(s => s.trim().toLowerCase()).filter(Boolean);
+  }
+  // 返回命中的关键词（小写），未命中返回 null
+  function findBlockedWord(info) {
+    const words = getBlockWords();
+    if (!words.length) return null;
+    const hay = (info.title + ' ' + info.company + ' ' + (info.fullText || info.jd || '')).toLowerCase();
+    for (const w of words) if (hay.includes(w)) return w;
+    return null;
+  }
+
   // ==================== AI ====================
   function callAI(template, jobTitle, jobCompany, jd) {
     return new Promise((resolve) => {
@@ -169,6 +185,7 @@
     if (document.getElementById('boss-auto-apply-panel')) return;
     const savedKey = GM_getValue('siliconflow_api_key', ''); // 仅读取前台保存的 Key
     const savedGreeting = GM_getValue(GREETING_KEY, '');
+    const savedBlock = GM_getValue(BLOCK_WORDS_KEY, '');
     const savedModel = getModel();
     const savedTemplates = getTemplates().join('\n---\n'); // 前台模板文本（含默认值）
     const savedSkill = getSkill();
@@ -181,7 +198,7 @@
     panel.id = 'boss-auto-apply-panel';
     panel.innerHTML = `
       <div id="bap-top" style="background:#2c3e50;color:#fff;padding:8px 12px;border-radius:8px 8px 0 0;font-weight:bold;display:flex;justify-content:space-between;cursor:pointer;">
-        <span>🤖 AI投递 v4.6</span><span>−</span>
+        <span>🤖 AI投递 v4.7</span><span>−</span>
       </div>
       <div id="bap-body" style="background:#fff;padding:10px;border:1px solid #2c3e50;border-top:none;border-radius:0 0 8px 8px;">
         <div style="display:flex;gap:4px;margin-bottom:8px;">
@@ -197,6 +214,7 @@
             <label style="flex:1;">间隔(s) <input id="bap-interval" type="number" min="5" max="600" value="${getIntervalSec()}" style="width:52px;font-size:10px;padding:2px;"></label>
           </div>
           <textarea id="bap-greeting" rows="2" placeholder="自定义招呼语（留空则用AI/模板；支持 {title} {company}）" style="width:100%;font-size:11px;padding:4px;margin-bottom:6px;box-sizing:border-box;resize:vertical;">${savedGreeting.replace(/</g, '&lt;')}</textarea>
+          <textarea id="bap-block" rows="2" placeholder="屏蔽关键词（逗号/换行分隔，命中即跳过；如：不接受线上面试, 仅线下）" style="width:100%;font-size:11px;padding:4px;margin-bottom:6px;box-sizing:border-box;resize:vertical;">${savedBlock.replace(/</g, '&lt;')}</textarea>
         </div>
         <div id="bap-view-ai" style="display:none;">
           <div style="font-size:10px;color:#666;margin-bottom:3px;">硅基流动 API Key（<a href="https://cloud.siliconflow.cn/account/ak" target="_blank" style="color:#2c7be5;">cloud.siliconflow.cn</a> 注册获取；不填则用模板招呼语）</div>
@@ -261,6 +279,7 @@
       e.target.value = v; GM_setValue(INTERVAL_KEY, String(v));
     };
     document.getElementById('bap-greeting').oninput = e => GM_setValue(GREETING_KEY, e.target.value); // 实时持久化，刷新不丢
+    document.getElementById('bap-block').oninput = e => GM_setValue(BLOCK_WORDS_KEY, e.target.value); // 屏蔽词实时持久化
     document.getElementById('bap-start').onclick = () => {
       if (!isJobsPage()) { log('⚠️ 请在职位列表页开始'); return; }
       running = true; stopRequested = false;
@@ -312,7 +331,8 @@
     const salary = (d?.querySelector('.job-salary, .salary')?.textContent || card?.querySelector('.job-salary, .salary')?.textContent || '').replace(/\s+/g, ' ').trim();
     const company = (d?.querySelector('.company-name, .job-detail-company, .boss-name')?.textContent || card?.querySelector('.company-name, .company-link, .boss-name')?.textContent || '').replace(/\s+/g, ' ').trim();
     const jd = (d?.querySelector('.job-sec-text, .desc, .job-detail-body')?.textContent || '').replace(/\s+/g, ' ').trim().substring(0, 500);
-    return { title, salary, company, jd, jobId: getJobId(card) };
+    const fullText = (d?.textContent || card?.textContent || '').replace(/\s+/g, ' ').trim(); // 详情全文，用于屏蔽词匹配
+    return { title, salary, company, jd, fullText, jobId: getJobId(card) };
   }
 
   function findGreetButton() {
@@ -469,6 +489,10 @@
           if (!info.title || !info.company) { card.click(); await sleep(2000); info = getJobInfoFromPage(card); }
           if (!info.title || !info.company) { log('⚠️ 无职位信息，跳过'); continue; }
           if (isApplied(info.jobId) || isSkipped(info.jobId)) continue;
+
+          // 屏蔽关键词：命中即跳过（不投递、不计入已投；每轮重新评估）
+          const blocked = findBlockedWord(info);
+          if (blocked) { log(`⛔ 命中屏蔽词「${blocked}」，跳过`); continue; }
 
           // 生成招呼语：优先用户自定义（持久化，可留空），其次 AI，最后模板
           const useAI = document.getElementById('bap-ai')?.checked !== false;
